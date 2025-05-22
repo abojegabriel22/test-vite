@@ -90,6 +90,11 @@ export const connectWallet = async (dispatch, chain) => {
     // ---------- SAVE TO CONTEXT + BACKEND ----------
     dispatch({ type: "SET_ADDRESS", payload: walletAddress });
 
+    console.log("Sending to backend:", {
+      address: walletAddress,
+      chain,
+    });
+
     const res = await fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
