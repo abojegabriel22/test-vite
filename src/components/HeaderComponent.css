@@ -1,0 +1,60 @@
+
+.bg-body-tertiary1{
+    background: var(--bg-color);
+    color: var(--text-color);
+    /* overflow: visible; */
+}
+.flip-box {
+    display: inline-block;
+    perspective: 1000px;
+  }
+  
+  .airdrop {
+    display: inline-block;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform-origin: center;
+    backface-visibility: hidden;
+    transition: transform 0.6s ease;
+  }
+  
+  /* Flip animation triggered by a class */
+  .airdrop.flip {
+    animation: flipHeadline 1s ease forwards;
+  }
+  
+  @keyframes flipHeadline {
+    0% {
+      transform: rotateX(0deg);
+    }
+    50% {
+      transform: rotateX(90deg);
+    }
+    100% {
+      transform: rotateX(0deg);
+    }
+  }
+  
+
+
+.nav-margin{
+    margin-right: 100px;
+}
+li a{
+    font-size: 1rem;
+    padding-right: 41px !important;
+}
+li a:hover{
+    border: 1px solid #00dd02;
+}
+.text-connect{
+  color: #00dd02;
+}
+.address{
+  color: var(--bg-color);
+}
+.text-muted{
+  color: var(--text-color) !important;
+}

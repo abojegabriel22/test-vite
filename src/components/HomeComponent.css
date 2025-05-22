@@ -1,0 +1,64 @@
+
+.home{
+    /* height: 800px; */
+    background-image: url("https://i.ibb.co/d40cpdXF/nfts.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* padding-top: 230px; */
+    overflow-x: hidden;
+    height: auto;
+}
+.text-div {
+  /* padding-left: 150px; */
+  max-width: 400px;
+  text-shadow: -1px -1px 0px #00dd02;
+}
+.text-div h2 {
+  padding-top: 75px;
+  font-size: 3rem;
+  overflow: hidden;
+  /* font-weight: 800; */
+}
+.text-div p{
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.image-div{
+  overflow: hidden;
+}
+.image-div img{
+  /* padding-left: 200px; */
+  max-width: 100%;
+  height: auto;
+  scale: 0.9;
+  animation: rotate 50s linear infinite;
+  cursor: pointer;
+}
+@keyframes rotate{
+  100%{
+      transform: rotate(360deg);
+  }
+}
+
+/* padding for crypto live charts  */
+.LiveChartSection{
+  margin-bottom: 4rem;
+}
+/* ////media query/// */
+@media screen and (max-width: 800px){
+  .text-div h2 {
+    font-size: 2rem;
+  }
+  .text-div p{
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  .image-div img{
+    scale: 0.8;
+  }
+}
+@media screen and (max-width: 500px){
+  .image-div img{
+    scale: 0.6;
+  }
+}

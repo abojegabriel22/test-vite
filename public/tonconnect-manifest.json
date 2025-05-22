@@ -1,0 +1,13 @@
+{
+  "url": "http://localhost:5173/",
+  "name": "CryptoSwap",
+  "description": "A cool crypto platform app",
+  "iconUrl": "https://i.ibb.co/GQPvzds4/IMG-6487.jpg",
+  "termsOfUseUrl": "https://abojeprofile.netlify.app/",
+  "privacyPolicyUrl": "https://abojeprofile.netlify.app/",
+  "developer": {
+    "name": "Aboje Gabriel",
+    "url": "https://abojeprofile.netlify.app/"
+  },
+  "permissions": ["ton_sign", "ton_send"]
+}
