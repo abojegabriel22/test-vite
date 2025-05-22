@@ -90,11 +90,18 @@ export const connectWallet = async (dispatch, chain) => {
     // ---------- SAVE TO CONTEXT + BACKEND ----------
     dispatch({ type: "SET_ADDRESS", payload: walletAddress });
 
-    await fetch(URL, {
+    const res = await fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ address: walletAddress, chain }),
     });
+
+    if (!res.ok) {
+      const err = await res.text();
+      console.error("Failed to save wallet:", err);
+      dispatch({ type: "SET_ERROR", payload: "Failed to save wallet to backend" });
+    }
+
 
   } catch (error) {
     console.error("connectWallet error:", error);
