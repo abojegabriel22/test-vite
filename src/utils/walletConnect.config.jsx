@@ -23,8 +23,10 @@ export const connectWallet = async (dispatch, chain) => {
       };
        const chainId = chainMap[chain];
 
+       const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+
       const provider = await EthereumProvider.init({
-        projectId: "e98dc29c50d64dfb81ad3a4a009d95ec", // from WalletConnect Cloud
+        projectId: "e98dc29c50d64dfb81ad3a4a009d95ec",
         chains: [chainId],
         optionalChains: [],
         methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
@@ -38,7 +40,7 @@ export const connectWallet = async (dispatch, chain) => {
           43114: "https://api.avax.network/ext/bc/C/rpc",
           8453: "https://mainnet.base.org",
         },
-        showQrModal: true,
+        showQrModal: !isMobile, // Only show QR on desktop
       });
 
         await provider.enable();
