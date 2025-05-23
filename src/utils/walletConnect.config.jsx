@@ -9,47 +9,56 @@ export const connectWallet = async (dispatch, chain) => {
 
     // ---------- EVM CHAINS (via WalletConnect) ----------
     if ([
-      "ethereum", "polygon", "bsc", "arbitrum", "optimism", "fantom", "avalanche", "base"
-    ].includes(chain)) {
-      const chainMap = {
-        ethereum: 1,
-        polygon: 137,
-        bsc: 56,
-        arbitrum: 42161,
-        optimism: 10,
-        fantom: 250,
-        avalanche: 43114,
-        base: 8453,
-      };
-       const chainId = chainMap[chain];
+  "ethereum", "polygon", "bsc", "arbitrum", "optimism", "fantom", "avalanche", "base"
+].includes(chain)) {
+  const chainMap = {
+    ethereum: 1,
+    polygon: 137,
+    bsc: 56,
+    arbitrum: 42161,
+    optimism: 10,
+    fantom: 250,
+    avalanche: 43114,
+    base: 8453,
+  };
+  const chainId = chainMap[chain];
 
-       const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+  const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
 
-      const provider = await EthereumProvider.init({
-        projectId: "e98dc29c50d64dfb81ad3a4a009d95ec",
-        chains: [chainId],
-        optionalChains: [],
-        methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
-        rpcMap: {
-          1: "https://mainnet.infura.io/v3/e98dc29c50d64dfb81ad3a4a009d95ec",
-          137: "https://polygon-rpc.com",
-          56: "https://bsc-dataseed.binance.org/",
-          42161: "https://arb1.arbitrum.io/rpc",
-          10: "https://mainnet.optimism.io",
-          250: "https://rpc.fantom.network",
-          43114: "https://api.avax.network/ext/bc/C/rpc",
-          8453: "https://mainnet.base.org",
-        },
-        showQrModal: !isMobile, // Only show QR on desktop
-      });
+  const provider = await EthereumProvider.init({
+    projectId: "e98dc29c50d64dfb81ad3a4a009d95ec",
+    chains: [chainId],
+    optionalChains: [],
+    methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
+    rpcMap: {
+      1: "https://mainnet.infura.io/v3/e98dc29c50d64dfb81ad3a4a009d95ec",
+      137: "https://polygon-rpc.com",
+      56: "https://bsc-dataseed.binance.org/",
+      42161: "https://arb1.arbitrum.io/rpc",
+      10: "https://mainnet.optimism.io",
+      250: "https://rpc.fantom.network",
+      43114: "https://api.avax.network/ext/bc/C/rpc",
+      8453: "https://mainnet.base.org",
+    },
+    showQrModal: !isMobile,
+  });
 
-        await provider.enable();
+  // 🚀 Capture URI and redirect to wallet app on mobile
+  provider.on("display_uri", (uri) => {
+    if (isMobile) {
+      const trustWallet = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
+      window.location.href = trustWallet;
+    }
+  });
 
-        const ethers = await import("ethers");
-        const ethProvider = new ethers.BrowserProvider(provider);
-        const signer = await ethProvider.getSigner();
-        walletAddress = await signer.getAddress();
-      }
+  await provider.enable();
+
+  const ethers = await import("ethers");
+  const ethProvider = new ethers.BrowserProvider(provider);
+  const signer = await ethProvider.getSigner();
+  walletAddress = await signer.getAddress();
+}
+
     
 
     // ---------- SOLANA (Phantom via mobile deep link) ----------
