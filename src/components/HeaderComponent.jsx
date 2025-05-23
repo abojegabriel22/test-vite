@@ -11,6 +11,7 @@ const Header = () => {
   const [currentText, setCurrentText] = useState(phrases[0]);
   const [flip, setFlip] = useState(false);
   const [index, setIndex] = useState(0);
+  const [walletLoading, setWalletLoading] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,8 +29,14 @@ const Header = () => {
 
   const { state, dispatch } = useWalletContext();
 
-  const handleConnect = () => {
-    connectWallet(dispatch, state.chain);  // pass selected chain
+  const handleConnect = async() => {
+    if (walletLoading) return;
+      setWalletLoading(true);
+    try {
+      await connectWallet(dispatch, state.chain);
+    } finally {
+      setWalletLoading(false); // stop loading
+    }
   };
 
 
@@ -143,8 +150,9 @@ const Header = () => {
                         e.stopPropagation();
                         handleConnect();
                       }}
+                      disabled = {walletLoading}
                     >
-                      Connect Wallet
+                      {walletLoading ? "Connecting..." : "Connect Wallet"}
                     </button>
                   </li>
                 </ul>
