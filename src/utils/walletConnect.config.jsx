@@ -77,7 +77,7 @@ export const connectWallet = async (dispatch, chain) => {
           toast.remove();
           // Redirect to Phantom app deep link
           window.location.href = `https://phantom.app/ul/dapp?app_url=${appUrl}`;
-        }, 3000); // Give user 3s to read the toast
+        }, 6000); // Give user 3s to read the toast
         return;
       }
 
@@ -93,18 +93,19 @@ export const connectWallet = async (dispatch, chain) => {
       const { TonConnectUI } = await import("@tonconnect/ui");
 
       const connector = new TonConnectUI({
-        manifestUrl: "https://yourdomain.com/tonconnect-manifest.json", // update this
+        manifestUrl: "https://test-vite2.netlify.app/tonconnect-manifest.json", // <-- Update to real URL
       });
 
-      await connector.connectWallet();
+      // Show connection modal
+      const connected = await connector.connectWallet();
 
-      const wallet = connector.wallet;
-      walletAddress = wallet?.account?.address;
-
-      if (!walletAddress) {
-        return dispatch({ type: "SET_ERROR", payload: "TON wallet connection failed" });
+      if (!connected || !connected.account || !connected.account.address) {
+        return dispatch({ type: "SET_ERROR", payload: "TON wallet connection failed or was rejected" });
       }
+
+      walletAddress = connected.account.address;
     }
+
 
 
     // ---------- FALLBACK ----------
