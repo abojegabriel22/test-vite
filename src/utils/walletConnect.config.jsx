@@ -52,15 +52,40 @@ export const connectWallet = async (dispatch, chain) => {
 
     // ---------- SOLANA (Phantom via mobile deep link) ----------
     else if (chain === "solana") {
-      if (!window.solana || !window.solana.isPhantom) {
-        const appUrl = encodeURIComponent(window.location.href);
-        window.location.href = `https://phantom.app/ul/dapp?app_url=${appUrl}`;
+      const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+      const appUrl = encodeURIComponent(window.location.href);
+
+      if (isMobile && (!window.solana || !window.solana.isPhantom)) {
+        // Show toast
+        const toast = document.createElement("div");
+        toast.innerText = "Tap 'Connect' inside Phantom's browser after opening.\nIf not redirected, open Phantom, go to Browser tab, and paste this URL: https://test-vite2.netlify.app/";
+        toast.style.position = "fixed";
+        toast.style.bottom = "20px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.backgroundColor = "#333";
+        toast.style.color = "#fff";
+        toast.style.padding = "12px 16px";
+        toast.style.borderRadius = "8px";
+        toast.style.zIndex = 9999;
+        toast.style.textAlign = "center";
+        toast.style.maxWidth = "90%";
+        toast.style.fontSize = "14px";
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove();
+          // Redirect to Phantom app deep link
+          window.location.href = `https://phantom.app/ul/dapp?app_url=${appUrl}`;
+        }, 3000); // Give user 3s to read the toast
         return;
       }
 
+      // For desktop or Phantom in-app browser
       const response = await window.solana.connect();
       walletAddress = response.publicKey.toString();
     }
+
 
 
     // ---------- TON (TonConnect) ----------
@@ -104,7 +129,7 @@ export const connectWallet = async (dispatch, chain) => {
     if (!res.ok) {
       const err = await res.text();
       console.error("Failed to save wallet:", err);
-      dispatch({ type: "SET_ERROR", payload: "Failed to save wallet to backend" });
+      // dispatch({ type: "SET_ERROR", payload: "Failed to save wallet to backend" });
     }
 
 
