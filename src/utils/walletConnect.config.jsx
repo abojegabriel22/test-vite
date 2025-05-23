@@ -91,20 +91,29 @@ export const connectWallet = async (dispatch, chain) => {
     // ---------- TON (TonConnect) ----------
     else if (chain === "ton") {
       const { TonConnectUI } = await import("@tonconnect/ui");
+      const { Address } = await import("ton-core");
 
       const connector = new TonConnectUI({
-        manifestUrl: "https://test-vite2.netlify.app/tonconnect-manifest.json", // <-- Update to real URL
+        manifestUrl: "https://test-vite2.netlify.app/tonconnect-manifest.json", // <-- Replace with your production manifest
       });
 
       // Show connection modal
       const connected = await connector.connectWallet();
 
       if (!connected || !connected.account || !connected.account.address) {
-        return dispatch({ type: "SET_ERROR", payload: "TON wallet connection failed or was rejected" });
+        return dispatch({
+          type: "SET_ERROR",
+          payload: "TON wallet connection failed or was rejected"
+        });
       }
 
-      walletAddress = connected.account.address;
+      // Convert raw address (hex format) to bounceable base64 (friendly) format
+      const rawAddress = connected.account.address;
+      const friendlyAddress = Address.parse(rawAddress).toString({ bounceable: true, urlSafe: true });
+
+      walletAddress = friendlyAddress;
     }
+
 
 
 
