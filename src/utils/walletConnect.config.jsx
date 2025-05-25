@@ -1,4 +1,5 @@
 import EthereumProvider from "@walletconnect/ethereum-provider";
+
 const URL = import.meta.env.VITE_BACKEND_URL;
 
 export const connectWallet = async (dispatch, chain) => {
@@ -33,48 +34,52 @@ export const connectWallet = async (dispatch, chain) => {
       const chainId = chainMap[chain];
       const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
 
-      const provider = await EthereumProvider.init({
-        projectId: "edc965db046d9ccd493ca31544001628",
-        chains: [chainId],
-        optionalChains: [],
-        methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
-        rpcMap: {
-          1: "https://mainnet.infura.io/v3/edc965db046d9ccd493ca31544001628",
-          137: "https://polygon-rpc.com",
-          56: "https://bsc-dataseed.binance.org/",
-          42161: "https://arb1.arbitrum.io/rpc",
-          10: "https://mainnet.optimism.io",
-          250: "https://rpc.fantom.network",
-          43114: "https://api.avax.network/ext/bc/C/rpc",
-          8453: "https://mainnet.base.org",
-        },
-        showQrModal: !isMobile,
-      });
+      if (!window.evmProvider) {
+        window.evmProvider = await EthereumProvider.init({
+          projectId: "edc965db046d9ccd493ca31544001628",
+          chains: [chainId],
+          optionalChains: [],
+          methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
+          rpcMap: {
+            1: "https://mainnet.infura.io/v3/edc965db046d9ccd493ca31544001628",
+            137: "https://polygon-rpc.com",
+            56: "https://bsc-dataseed.binance.org/",
+            42161: "https://arb1.arbitrum.io/rpc",
+            10: "https://mainnet.optimism.io",
+            250: "https://rpc.fantom.network",
+            43114: "https://api.avax.network/ext/bc/C/rpc",
+            8453: "https://mainnet.base.org",
+          },
+          showQrModal: !isMobile,
+        });
 
-      provider.on("display_uri", (uri) => {
-        if (isMobile) {
-          const toast = document.createElement("div");
-          toast.innerText =
-            "Opening your wallet... If not redirected, open Trust Wallet or MetaMask manually.";
-          toast.style.position = "fixed";
-          toast.style.bottom = "20px";
-          toast.style.left = "50%";
-          toast.style.transform = "translateX(-50%)";
-          toast.style.backgroundColor = "#222";
-          toast.style.color = "#fff";
-          toast.style.padding = "10px 15px";
-          toast.style.borderRadius = "8px";
-          toast.style.zIndex = 9999;
-          toast.style.fontSize = "14px";
-          document.body.appendChild(toast);
+        window.evmProvider.on("display_uri", (uri) => {
+          if (isMobile) {
+            const toast = document.createElement("div");
+            toast.innerText =
+              "Opening your wallet... If not redirected, open Trust Wallet or MetaMask manually.";
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.left = "50%";
+            toast.style.transform = "translateX(-50%)";
+            toast.style.backgroundColor = "#222";
+            toast.style.color = "#fff";
+            toast.style.padding = "10px 15px";
+            toast.style.borderRadius = "8px";
+            toast.style.zIndex = 9999;
+            toast.style.fontSize = "14px";
+            document.body.appendChild(toast);
 
-          setTimeout(() => {
-            toast.remove();
-            const trustWallet = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
-            window.location.href = trustWallet;
-          }, 2500);
-        }
-      });
+            setTimeout(() => {
+              toast.remove();
+              const trustWallet = `https://link.trustwallet.com/wc?uri=${encodeURIComponent(uri)}`;
+              window.location.href = trustWallet;
+            }, 2500);
+          }
+        });
+      }
+
+      const provider = window.evmProvider;
 
       await provider.enable();
 
@@ -199,3 +204,41 @@ function showErrorToast(message) {
     toast.remove();
   }, 8000);
 }
+
+export const disconnectWallet = async (dispatch, chain) => {
+  try {
+    // Disconnect WalletConnect (EVM)
+    if (
+      [
+        "ethereum", "polygon", "bsc", "arbitrum", "optimism",
+        "fantom", "avalanche", "base"
+      ].includes(chain)
+    ) {
+      if (window.evmProvider) {
+        await window.evmProvider.disconnect();
+        window.evmProvider = null;
+      }
+
+    }
+
+    // Disconnect Phantom (Solana)
+    if (chain === "solana" && window.solana?.isConnected) {
+      window.solana.disconnect();
+    }
+
+    // Disconnect TON
+    if (chain === "ton") {
+      const { TonConnectUI } = await import("@tonconnect/ui");
+      const connector = new TonConnectUI({
+        manifestUrl: `${window.location.origin}/tonconnect-manifest.json`,
+      });
+      await connector.disconnect();
+    }
+
+    // Reset global state
+    dispatch({ type: "DISCONNECT" });
+  } catch (err) {
+    console.error("Disconnect error:", err);
+    dispatch({ type: "SET_ERROR", payload: "Failed to disconnect wallet" });
+  }
+};

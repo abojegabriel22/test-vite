@@ -14,6 +14,8 @@ export const walletReducer = (state, action) => {
             return {...state, chain: action.payload}
         case "TOGGLE_DROPDOWN":
             return { ...state, dropdownVisible: !state.dropdownVisible };
+        case "DISCONNECT":
+            return { ...initialWalletState }; // reset to defaults
         case "SET_ERROR":
             return {...state, error: action.payload}
             default:

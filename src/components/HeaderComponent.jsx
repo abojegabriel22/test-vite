@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./HeaderComponent.css";
 import { useWalletContext } from "../context/wallet.context";
-import { connectWallet } from "../utils/walletConnect.config";
+import { connectWallet, disconnectWallet } from "../utils/walletConnect.config";
 // import { connectWallet } from "../connectWallet";
 
 
@@ -96,9 +96,51 @@ const Header = () => {
                   Onboard
                 </a>
               </li>
-              <li className="nav-item dropdown">
+              <li className="nav-item dropdown-center hover-dropdown position-relative">
                 <button
-                  className="btn btn-secondary dropdown-toggle"
+                  className="btn dropdown-toggle text-dropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Cloud Storage
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-light p-3 dropdown-menu-media"
+                  style={{
+                    minWidth: '500px',
+                    left: '50%',
+                    transform: 'translateX(-50%)'
+                  }}
+                >
+                  <div className="row">
+                    <div className="col-md-6">
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/TqBGZ8xV/download.png" alt="wallet-logo" width={20} height={20} /></span> Trust Wallet</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/G4nrtH4T/metamask.png" alt="wallet-logo" width={20} height={20} /></span> MetaMask</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/FvxNTy5/coinbase.png" alt="wallet-logo" width={20} height={20} /></span> Coinbase Wallet</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/B278RgtX/cryptocom.png" alt="wallet-logo" width={20} height={20} /></span> Crypto.com</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/7dTw9mj0/ledger.jpg" alt="wallet-logo" width={20} height={20} /></span> Ledger</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/YrJPcVW/ellipal.png" alt="wallet-logo" width={20} height={20} /></span> Ellipal Wallet</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/zH4nYD1s/moreno.jpg" alt="wallet-logo" width={20} height={20} /></span> Moreno</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/TD8hnprF/defiwallet.jpg" alt="wallet-logo" width={20} height={20} /></span> Crypto.com | Defi wallet</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/7xDGNzdN/phantom.png" alt="wallet-logo" width={20} height={20} /></span> Phantom</a></li>
+                    </div>
+                    <div className="col-md-6">
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/7xDGNzdN/phantom.png" alt="wallet-logo" width={20} height={20} /></span> Safepal</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/mVTpBdgQ/electrum.jpg" alt="wallet-logo" width={20} height={20} /></span> Electrum Wallet</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/Xr4DYZKk/myether.png" alt="wallet-logo" width={20} height={20} /></span> MyEther</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/Z6J93GbD/exodus.jpg" alt="wallet-logo" width={20} height={20} /></span> Exodus</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/Kc574KDt/bestwallet.jpg" alt="wallet-logo" width={20} height={20} /></span> Best Wallet</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/RTJbhsCz/safemoon.png" alt="wallet-logo" width={20} height={20} /></span> Safemoon</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/KcLMBgyB/fortmatic.png" alt="wallet-logo" width={20} height={20} /></span> Fortmatic</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/sJ1myqg3/trezor.png" alt="wallet-logo" width={20} height={20} /></span> Trezor</a></li>
+                      <li><a className="dropdown-item nav-link text-dark1" href="/"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/VWpZskrZ/wc1.png" alt="wallet-logo" width={20} height={20} /></span> Others</a></li>
+                    </div>
+                  </div>
+                </ul>
+              </li>
+              <li className="nav-item dropdown hover-dropdown">
+                <button
+                  className="btn text-dropdown dropdown-toggle"
                   type="button"
                   id="walletDropdown"
                   data-bs-toggle="dropdown"
@@ -113,6 +155,23 @@ const Header = () => {
                     "Connect"
                   )}
                 </button>
+                {state.address && (
+                  <ul>
+                    <li>
+                      <button
+                      className="btn btn-outline-danger w-100 mt-2"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        await disconnectWallet(dispatch, state.chain);
+                      }}
+                    >
+                      Disconnect
+                    </button>
+                    </li>
+                  </ul>
+                )}
+
                 {state.error && (
                   <div className="text-danger mt-2 small">{state.error}</div>
                 )}
@@ -156,7 +215,6 @@ const Header = () => {
                     </button>
                   </li>
                 </ul>
-                <small className="text-muted">Select wallet chain</small>
 
               </li>
             </ul>
