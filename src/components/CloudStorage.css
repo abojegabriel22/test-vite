@@ -1,0 +1,52 @@
+
+.nav-tabs {
+  border-bottom: 1px solid var(--text-color);
+  position: relative;
+}
+
+.nav-tabs .nav-link.active {
+  color: #fff !important;
+  position: relative;
+  z-index: 2;
+  border-bottom: none !important;
+  background-color: var(--second-bg-color);
+}
+
+
+/* Optional: style inactive tabs if needed */
+.nav-tabs .nav-link {
+  color: #999;
+  transition: all 0.3s ease;
+  background-color: transparent;
+  /* border: none; */
+}
+
+.nav-tabs .nav-link:hover {
+  color: #fff;
+}
+.bg-text-area{
+    /* background: #033103; */
+    background: var(--second-bg-color);
+    color: var(--text-color);
+}
+.dim-color{
+    background: #999;
+}
+.submit:hover{
+    /* background: #033103; */
+    background: #033103 !important;
+}
+.LiveChartSection{
+  margin-bottom: 4rem;
+}
+@media screen and (max-width: 350px){
+    .text-backup{
+        font-size: 18px;
+    }
+    .text-h5{
+        font-size: 16px;
+    }
+    .nav-small{
+        font-size: 12px;
+    }
+}
