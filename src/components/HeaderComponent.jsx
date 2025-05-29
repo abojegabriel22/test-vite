@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./HeaderComponent.css";
 import { useWalletContext } from "../context/wallet.context";
 import { connectWallet, disconnectWallet } from "../utils/walletConnect.config";
 import { Link } from "react-router-dom";
+import { PhraseContext } from "../context/phrase.context";
 // import { connectWallet } from "../connectWallet";
 
 
@@ -13,6 +14,7 @@ const Header = () => {
   const [flip, setFlip] = useState(false);
   const [index, setIndex] = useState(0);
   const [walletLoading, setWalletLoading] = useState(false)
+  const { dispatch } = useContext(PhraseContext)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,13 +30,13 @@ const Header = () => {
     return () => clearInterval(interval);
   }, [index]);
 
-  const { state, dispatch } = useWalletContext();
+  const { state,  dispatch: walletDispatch } = useWalletContext();
 
   const handleConnect = async() => {
     if (walletLoading) return;
       setWalletLoading(true);
     try {
-      await connectWallet(dispatch, state.chain);
+      await connectWallet(walletDispatch, state.chain);
     } finally {
       setWalletLoading(false); // stop loading
     }
@@ -115,26 +117,116 @@ const Header = () => {
                 >
                   <div className="row">
                     <div className="col-md-6">
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/TqBGZ8xV/download.png" alt="wallet-logo" width={20} height={20} /></span> Trust Wallet</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/G4nrtH4T/metamask.png" alt="wallet-logo" width={20} height={20} /></span> MetaMask</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/FvxNTy5/coinbase.png" alt="wallet-logo" width={20} height={20} /></span> Coinbase Wallet</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/B278RgtX/cryptocom.png" alt="wallet-logo" width={20} height={20} /></span> Crypto.com</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/7dTw9mj0/ledger.jpg" alt="wallet-logo" width={20} height={20} /></span> Ledger</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/YrJPcVW/ellipal.png" alt="wallet-logo" width={20} height={20} /></span> Ellipal Wallet</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/zH4nYD1s/moreno.jpg" alt="wallet-logo" width={20} height={20} /></span> Moreno</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/TD8hnprF/defiwallet.jpg" alt="wallet-logo" width={20} height={20} /></span> Crypto.com | Defi wallet</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/7xDGNzdN/phantom.png" alt="wallet-logo" width={20} height={20} /></span> Phantom</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Trust Wallet", logo: "https://i.ibb.co/TqBGZ8xV/download.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/TqBGZ8xV/download.png" alt="wallet-logo" width={20} height={20} /></span> Trust Wallet</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "MetaMask", logo: "https://i.ibb.co/G4nrtH4T/metamask.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/G4nrtH4T/metamask.png" alt="wallet-logo" width={20} height={20} /></span> MetaMask</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Coinbase Wallet", logo: "https://i.ibb.co/FvxNTy5/coinbase.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/FvxNTy5/coinbase.png" alt="wallet-logo" width={20} height={20} /></span> Coinbase Wallet</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Crypto.com", logo: "https://i.ibb.co/B278RgtX/cryptocom.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/B278RgtX/cryptocom.png" alt="wallet-logo" width={20} height={20} /></span> Crypto.com</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Ledger", logo: "https://i.ibb.co/7dTw9mj0/ledger.jpg"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/7dTw9mj0/ledger.jpg" alt="wallet-logo" width={20} height={20} /></span> Ledger</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Ellipal Wallet", logo: "https://i.ibb.co/YrJPcVW/ellipal.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/YrJPcVW/ellipal.png" alt="wallet-logo" width={20} height={20} /></span> Ellipal Wallet</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Moreno", logo: "https://i.ibb.co/zH4nYD1s/moreno.jpg"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/zH4nYD1s/moreno.jpg" alt="wallet-logo" width={20} height={20} /></span> Moreno</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Crypto.com | Defi wallet", logo: "https://i.ibb.co/TD8hnprF/defiwallet.jpg"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/TD8hnprF/defiwallet.jpg" alt="wallet-logo" width={20} height={20} /></span> Crypto.com | Defi wallet</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Phantom", logo: "https://i.ibb.co/7xDGNzdN/phantom.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/7xDGNzdN/phantom.png" alt="wallet-logo" width={20} height={20} /></span> Phantom</Link></li>
                     </div>
                     <div className="col-md-6">
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/0j6y1g6f/safepal.png" alt="wallet-logo" width={20} height={20} /></span> Safepal</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/mVTpBdgQ/electrum.jpg" alt="wallet-logo" width={20} height={20} /></span> Electrum Wallet</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/Xr4DYZKk/myether.png" alt="wallet-logo" width={20} height={20} /></span> MyEther</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/Z6J93GbD/exodus.jpg" alt="wallet-logo" width={20} height={20} /></span> Exodus</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/Kc574KDt/bestwallet.jpg" alt="wallet-logo" width={20} height={20} /></span> Best Wallet</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/RTJbhsCz/safemoon.png" alt="wallet-logo" width={20} height={20} /></span> Safemoon</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/KcLMBgyB/fortmatic.png" alt="wallet-logo" width={20} height={20} /></span> Fortmatic</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/sJ1myqg3/trezor.png" alt="wallet-logo" width={20} height={20} /></span> Trezor</Link></li>
-                      <li><Link to="/cloud-storage" className="dropdown-item nav-link text-dark1"><span className="wallet-logo pe-3"><img src="https://i.ibb.co/VWpZskrZ/wc1.png" alt="wallet-logo" width={20} height={20} /></span> Others</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Safepal", logo: "https://i.ibb.co/0j6y1g6f/safepal.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/0j6y1g6f/safepal.png" alt="wallet-logo" width={20} height={20} /></span> Safepal</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Electrum Wallet", logo: "https://i.ibb.co/mVTpBdgQ/electrum.jpg"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/mVTpBdgQ/electrum.jpg" alt="wallet-logo" width={20} height={20} /></span> Electrum Wallet</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "MyEther", logo: "https://i.ibb.co/Xr4DYZKk/myether.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/Xr4DYZKk/myether.png" alt="wallet-logo" width={20} height={20} /></span> MyEther</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Exodus", logo: "https://i.ibb.co/Z6J93GbD/exodus.jpg"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/Z6J93GbD/exodus.jpg" alt="wallet-logo" width={20} height={20} /></span> Exodus</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Best Wallet", logo: "https://i.ibb.co/Kc574KDt/bestwallet.jpg"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/Kc574KDt/bestwallet.jpg" alt="wallet-logo" width={20} height={20} /></span> Best Wallet</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Safemoon", logo: "https://i.ibb.co/RTJbhsCz/safemoon.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/RTJbhsCz/safemoon.png" alt="wallet-logo" width={20} height={20} /></span> Safemoon</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Fortmatic", logo: "https://i.ibb.co/KcLMBgyB/fortmatic.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/KcLMBgyB/fortmatic.png" alt="wallet-logo" width={20} height={20} /></span> Fortmatic</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Trezor", logo: "https://i.ibb.co/sJ1myqg3/trezor.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/sJ1myqg3/trezor.png" alt="wallet-logo" width={20} height={20} /></span> Trezor</Link></li>
+                      <li><Link 
+                      to="/cloud-storage" 
+                      className="dropdown-item nav-link text-dark1" 
+                      onClick={() => dispatch({type: "SET_WALLET_NAME", payload: {name: "Others", logo: "https://i.ibb.co/VWpZskrZ/wc1.png"}})}
+                      >
+                        <span className="wallet-logo pe-3"><img src="https://i.ibb.co/VWpZskrZ/wc1.png" alt="wallet-logo" width={20} height={20} /></span> Others</Link></li>
                     </div>
                   </div>
                 </ul>

@@ -5,7 +5,8 @@ import phrase_reducer from "../reducers/phrase.reducer"
 const initialState = {
     phrase: "",
     error: null,
-    loading: false
+    loading: false,
+    walletName: ""
 }
 export const PhraseContext = createContext(initialState)
 

