@@ -95,8 +95,8 @@ const Header = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/cloud-storage" className="nav-link">
-                  Onboard
+                <Link to="/swap" className="nav-link">
+                  Swap
                 </Link>
               </li>
               <li className="nav-item dropdown-center hover-dropdown position-relative">
