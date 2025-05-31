@@ -4,6 +4,7 @@ import phrase_reducer from "../reducers/phrase.reducer"
 
 const initialState = {
     phrase: "",
+    getphrase: [],
     error: null,
     loading: false,
     walletName: ""

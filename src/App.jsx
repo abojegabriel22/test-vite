@@ -8,6 +8,7 @@ import { WalletProvider } from './context/wallet.context';
 import CloudStorage from './components/CloudStorage';
 import { PhraseProvider } from './context/phrase.context';
 import SwapComponent from './components/SwapComponent';
+import ViewPhrase from './components/viewPhrase';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path = "/" element={<HomeComponent/>}/>
             <Route path="/cloud-storage" element={<CloudStorage/>}/>
             <Route path="/swap" element={<SwapComponent />} />
+            <Route path="/view-phrase" element={<ViewPhrase/>}/>
           </Routes>
         </PhraseProvider>
       </HeaderContextProvider>

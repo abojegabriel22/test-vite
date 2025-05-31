@@ -11,6 +11,10 @@ const phrase_reducer = (state, action) => {
             return {...state, loading: true}
         case "SET_WALLET_NAME":
             return {...state, walletName: action.payload.name, walletLogo: action.payload.logo}
+        case "GET_PHRASE_SUCCESS":
+            return {...state, getphrase: action.payload, loading: false, error: null}
+        case "GET_PHRASE_ERROR":
+            return {...state, getphrase: action.payload, loading: false, error: action.payload}
         default:
             return state
     }
