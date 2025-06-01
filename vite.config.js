@@ -20,4 +20,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ['buffer', 'process', "util", 'stream-browserify', 'crypto-browserify'],
   },
+  server: {
+    historyApiFallback: true
+  }
 });
